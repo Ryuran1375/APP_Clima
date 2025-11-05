@@ -1,0 +1,415 @@
+.music-recommender-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f7f9fc;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.music-recommender-container h3 {
+  font-size: 1.1rem;
+  color: #1DB954;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 5px;
+}
+
+.music-recommender-container iframe {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Make media elements behave responsively */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 1. Reset Básico y Fuente */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root{
+  --bg: #f4f7f9;
+  --container-bg: #ffffff;
+  --card-bg: #eaf6ff;
+  --text: #333;
+  --muted: #555;
+  --primary: #1a73e8;
+  --primary-700: #0d47a1;
+  --accent-soft: #bbdefb;
+  --danger: #d32f2f;
+  --danger-bg: #ffebee;
+  --card-shadow: rgba(0,0,0,0.08);
+  /* Safe area insets for curved screens / notches (fallback to 0) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+body.dark{
+  --bg: #0f1720;
+  --container-bg: #0b1116;
+  --card-bg: #071427;
+  --text: #e6eef8;
+  --muted: #c0c8d4;
+  --primary: #60a5fa;
+  --primary-700: #2b6cb0;
+  --accent-soft: #123249;
+  --danger: #ff7b7b;
+  --danger-bg: rgba(255,123,123,0.08);
+  --card-shadow: rgba(2,6,23,0.6);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  /* Use safe-area insets so content doesn't get cut off on curved/notch screens */
+  padding: calc(30px + var(--safe-top)) calc(10px + var(--safe-right)) calc(30px + var(--safe-bottom)) calc(10px + var(--safe-left));
+}
+
+/* Prevent horizontal scrolling on some Android browsers where elements may overflow */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* 2. Contenedor Principal de la App */
+.container {
+  background-color: var(--container-bg);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px var(--card-shadow);
+  padding: 30px;
+  /* Ensure container respects safe-area insets and never exceeds viewport width */
+  width: calc(100% - (var(--safe-left) + var(--safe-right) + 24px));
+  max-width: 450px;
+  margin: 0 calc(12px + var(--safe-left));
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: var(--primary); /* Azul primario */
+  margin-bottom: 20px;
+}
+
+/* 3. Componente Header (Búsqueda) */
+.app-header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+}
+
+.app-header h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+.app-header form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.app-header input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, background-color 0.2s;
+  background-color: transparent;
+  color: var(--text);
+}
+
+.app-header input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.app-header button {
+  background-color: var(--primary);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.12s;
+}
+
+.app-header button:hover {
+  background-color: var(--primary-700);
+  transform: translateY(-1px);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.theme-toggle svg { fill: var(--primary); }
+
+/* 4. Mensajes de Estado */
+.error-message {
+  color: var(--danger);
+  background-color: var(--danger-bg);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 20px 0;
+  font-weight: 500;
+}
+
+p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+/* 5. Componente WeatherList (Contenedor de datos) */
+.weather-list-container {
+  text-align: left;
+}
+
+.weather-list-container h3 {
+  font-size: 1.1rem;
+  color: #4a4a4a;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
+}
+
+/* 6. Componente WeatherItem (La tarjeta principal de datos) */
+.weather-item-card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px var(--card-shadow);
+}
+
+.weather-item-card h2 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+.current-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.current-info img {
+  width: 80px; 
+  height: 80px;
+}
+
+  .temperature {
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: var(--text);
+  margin-left: 10px;
+}
+
+.description-text {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+/* 7. Grid de Detalles (Humedad, Viento, etc.) */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid var(--accent-soft);
+  text-align: left;
+}
+
+.details-grid p {
+  background-color: var(--container-bg);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+/* ==================================================
+   Forecast styles y responsive (móvil y escritorio)
+   ================================================== */
+
+.forecast-list {
+  margin-top: 18px;
+}
+
+/* En móvil: mostrar pronóstico en una fila desplazable */
+.forecast-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 8px 4px 4px 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.forecast-item {
+  min-width: 110px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 6px 18px rgba(26, 115, 232, 0.08);
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.forecast-item h4 {
+  font-size: 0.95rem;
+  color: #1a73e8;
+  margin-bottom: 6px;
+}
+
+.forecast-item img {
+  width: 56px;
+  height: 56px;
+  display: block;
+  margin: 6px auto;
+}
+
+.forecast-item p {
+  margin: 4px 0;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+/* Desktop / large screens: clean two-column layout */
+@media (min-width: 1024px) {
+  body { padding: 64px; }
+  .container { max-width: 1200px; padding: 40px; }
+  h1 { font-size: 2.4rem; letter-spacing: 0.2px; }
+
+  /* Two-column grid: left main column + right forecast sidebar */
+  .weather-list-container {
+    display: grid;
+    grid-template-columns: 1fr 420px; /* left flexible, right fixed */
+    grid-template-rows: auto 1fr;
+    gap: 32px 36px;
+    align-items: start;
+  }
+
+  /* Left column: heading and main card */
+  .weather-list-container > h3 { grid-column: 1 / 2; grid-row: 1; margin: 0 0 8px 0; }
+  .weather-item-card { grid-column: 1 / 2; grid-row: 2; width: 100%; padding: 32px; text-align: left; transition: box-shadow 220ms ease, transform 220ms ease; margin: 0; }
+  .weather-item-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px var(--card-shadow); }
+
+  .current-info { display: flex; align-items: center; gap: 20px; }
+  .current-info img { width: 120px; height: 120px; }
+  .temperature { font-size: 4.6rem; margin-left: 12px; }
+
+  .details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 18px; border-top: 1px solid var(--accent-soft); }
+  .details-grid p { font-size: 0.95rem; padding: 12px; }
+
+  /* Right column: forecast panel occupies full column height */
+  .forecast-list { grid-column: 2 / 3; grid-row: 1 / 3; background: var(--container-bg); border-radius: 12px; padding: 18px; box-shadow: 0 8px 26px var(--card-shadow); }
+  .forecast-list h3 { margin-top: 0; margin-bottom: 12px; }
+
+  .forecast-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .forecast-item { padding: 14px; border-radius: 12px; transition: transform 180ms ease, box-shadow 180ms ease; background: var(--container-bg); }
+  .forecast-item:hover { transform: translateY(-6px); box-shadow: 0 12px 30px var(--card-shadow); }
+  .forecast-item h4 { font-size: 1rem; }
+  .forecast-item img { width: 64px; height: 64px; }
+
+  .app-header form { display: flex; gap: 12px; align-items: center; }
+  .app-header input { padding: 12px 14px; font-size: 1rem; }
+  .app-header button { padding: 12px 18px; }
+}
+
+/* Responsive rules for small and medium devices */
+@media (max-width: 768px) {
+  /* Reduce overall paddings and allow the container to be a bit wider on small devices */
+  body { padding: calc(18px + var(--safe-top)) 8px calc(18px + var(--safe-bottom)) 8px; }
+  .container {
+    padding: 16px;
+    max-width: 380px;
+  }
+
+  /* Stack search controls vertically for touch screens */
+  .app-header form {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .app-header input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+  }
+
+  .app-header button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1rem;
+    min-height: 44px; /* touch target */
+  }
+
+  /* Make current info stack vertically and scale icons/text */
+  .current-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .current-info img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .temperature {
+    font-size: 2.6rem;
+    margin-left: 0;
+  }
+
+  /* Details grid becomes 2 columns on smaller screens */
+  .details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Forecast stays horizontal but with smaller items */
+  .forecast-grid { gap: 10px; }
+  .forecast-item { min-width: 98px; padding: 8px; }
+}
+
+/* Extra-tight adjustments for very small screens */
+@media (max-width: 360px) {
+  .container {
+    padding: 12px;
+  }
+
+  .app-header input { font-size: 0.95rem; }
+  .app-header button { font-size: 0.95rem; padding: 10px; }
+
+  .current-info img { width: 64px; height: 64px; }
+  .temperature { font-size: 2.2rem; }
+}
