@@ -20,14 +20,12 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Make media elements behave responsively */
 img, video, iframe {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* 1. Reset Básico y Fuente */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -46,7 +44,6 @@ img, video, iframe {
   --danger: #d32f2f;
   --danger-bg: #ffebee;
   --card-shadow: rgba(0,0,0,0.08);
-  /* Safe area insets for curved screens / notches (fallback to 0) */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
