@@ -33,17 +33,18 @@ img, video, iframe {
 }
 
 :root{
-  --bg: #f4f7f9;
+  /* Paleta formal y profesional */
+  --bg: #f4f6f8;
   --container-bg: #ffffff;
-  --card-bg: #eaf6ff;
-  --text: #333;
-  --muted: #555;
-  --primary: #1a73e8;
-  --primary-700: #0d47a1;
-  --accent-soft: #bbdefb;
-  --danger: #d32f2f;
-  --danger-bg: #ffebee;
-  --card-shadow: rgba(0,0,0,0.08);
+  --card-bg: #fbfdff;
+  --text: #0f1720;
+  --muted: #6b7280;
+  --primary: #0b4da0;
+  --primary-700: #083671;
+  --accent-soft: #e6eefb;
+  --danger: #b91c1c;
+  --danger-bg: #fff1f2;
+  --card-shadow: rgba(15,23,42,0.06);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -65,15 +66,12 @@ body.dark{
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg);
   color: var(--text);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: block; /* desktop-friendly layout */
   min-height: 100vh;
-  /* Use safe-area insets so content doesn't get cut off on curved/notch screens */
-  padding: calc(30px + var(--safe-top)) calc(10px + var(--safe-right)) calc(30px + var(--safe-bottom)) calc(10px + var(--safe-left));
+  padding: calc(20px + var(--safe-top)) calc(40px + var(--safe-right)) calc(20px + var(--safe-bottom)) calc(40px + var(--safe-left));
 }
 
 /* Prevent horizontal scrolling on some Android browsers where elements may overflow */
@@ -86,25 +84,25 @@ html, body {
 .container {
   background-color: var(--container-bg);
   border-radius: 12px;
-  box-shadow: 0 10px 30px var(--card-shadow);
-  padding: 30px;
-  /* Ensure container respects safe-area insets and never exceeds viewport width */
-  width: calc(100% - (var(--safe-left) + var(--safe-right) + 24px));
-  max-width: 450px;
-  margin: 0 calc(12px + var(--safe-left));
-  text-align: center;
+  box-shadow: 0 8px 28px var(--card-shadow);
+  padding: 28px;
+  width: 100%;
+  max-width: 1200px; /* ancho adecuado para PC */
+  margin: 24px auto;
+  text-align: left; /* alineado a la izquierda en escritorio */
 }
 
 h1 {
-  font-size: 1.5rem;
-  color: var(--primary); /* Azul primario */
+  font-size: 1.6rem;
+  color: var(--primary);
   margin-bottom: 20px;
+  font-weight: 700;
 }
 
 /* 3. Componente Header (Búsqueda) */
 .app-header {
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(15,23,42,0.06);
   margin-bottom: 20px;
 }
 
@@ -122,11 +120,11 @@ h1 {
 
 .app-header input {
   flex-grow: 1;
-  padding: 10px;
-  border: 1px solid rgba(0,0,0,0.12);
+  padding: 10px 12px;
+  border: 1px solid rgba(15,23,42,0.08);
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s, background-color 0.2s;
+  transition: border-color 0.18s, box-shadow 0.18s;
   background-color: transparent;
   color: var(--text);
 }
@@ -139,12 +137,12 @@ h1 {
 .app-header button {
   background-color: var(--primary);
   color: white;
-  padding: 10px 15px;
+  padding: 10px 14px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.12s;
+  font-weight: 700;
+  transition: background-color 0.12s, transform 0.12s;
 }
 
 .app-header button:hover {
@@ -175,7 +173,7 @@ h1 {
   padding: 10px;
   border-radius: 8px;
   margin: 20px 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 p {
@@ -199,11 +197,11 @@ p {
 
 /* 6. Componente WeatherItem (La tarjeta principal de datos) */
 .weather-item-card {
-  background-color: var(--card-bg);
+  background-color: var(--container-bg);
   border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  padding: 22px;
+  text-align: left;
+  box-shadow: 0 8px 22px var(--card-shadow);
 }
 
 .weather-item-card h2 {
@@ -225,8 +223,8 @@ p {
 }
 
   .temperature {
-  font-size: 3.5rem;
-  font-weight: 300;
+  font-size: 3.2rem;
+  font-weight: 400;
   color: var(--text);
   margin-left: 10px;
 }
