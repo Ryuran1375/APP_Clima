@@ -1,103 +1,86 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import WeatherList from './components/WeatherList';
-import MusicRecommender from './components/MusicRecommender';
+import Login from './components/Login';
+import MainMenu from './components/MainMenu';
+import AppHeader from './components/AppHeader';
+import WeatherApp from './apps/WeatherApp';
+import UsersApp from './apps/UsersApp';
+import CocktailsApp from './apps/CocktailsApp';
 import './App.css';
 
-const API_KEY = 'e51c5068390588ada28ebae61a2f7b6a';
-const INITIAL_CITY = 'Reynosa, MX';
-
 function App() {
-  const [city, setCity] = useState(INITIAL_CITY);
-  const [weatherData, setWeatherData] = useState(null);
-  const [forecastData, setForecastData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentApp, setCurrentApp] = useState(null);
 
-  const fetchWeather = async (cityName) => {
-    if (!cityName) return;
-
-    setIsLoading(true);
-    setError(null);
-    
-    const normalizedCity = cityName.replace(/\s*,\s*/, ',');
-    const encodedCity = encodeURIComponent(normalizedCity);
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${API_KEY}&units=metric&lang=es`;
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Error de autenticación: clave API inválida.');
-        } else if (response.status === 404) {
-          throw new Error('Ciudad no encontrada. Intenta con otro nombre.');
-        } else {
-          throw new Error(`Error de la API: ${response.status} ${response.statusText}`);
-        }
-      }
-
-      const data = await response.json();
-      setWeatherData(data);
-      setForecastData(null);
-    } catch (err) {
-      setError(err.message);
-      setWeatherData(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchForecast = async (cityName) => {
-    if (!cityName) return;
-
-    const normalizedCity = cityName.replace(/\s*,\s*/, ',');
-    const encodedCity = encodeURIComponent(normalizedCity);
-    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodedCity}&appid=${API_KEY}&units=metric&lang=es`;
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Error de autenticación: clave API inválida.');
-        } else if (response.status === 404) {
-          throw new Error('Forecast no encontrado para la ciudad solicitada.');
-        } else {
-          throw new Error(`Error de la API (forecast): ${response.status} ${response.statusText}`);
-        }
-      }
-
-      const data = await response.json();
-      setForecastData(data);
-    } catch (err) {
-      setError(err.message);
-      setForecastData(null);
-    }
-  };
-
+  // Verificar si hay sesión guardada al cargar
   useEffect(() => {
-    fetchWeather(city);
-    fetchForecast(city);
-  }, [city]); 
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      const user = JSON.parse(userData);
+      setCurrentUser(user.username);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
-  const weatherDescription = weatherData?.weather?.[0]?.description || 'desconocido';
+  const handleLoginSuccess = (username) => {
+    setCurrentUser(username);
+    setIsLoggedIn(true);
+  };
 
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+    setCurrentApp(null);
+  };
+
+  const handleSelectApp = (appId) => {
+    setCurrentApp(appId);
+  };
+
+  const handleBackToMenu = () => {
+    setCurrentApp(null);
+  };
+
+  // Si no está autenticado, mostrar login
+  if (!isLoggedIn) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
+
+  // Si está autenticado pero no ha seleccionado app, mostrar menú
+  if (!currentApp) {
+    return (
+      <MainMenu 
+        username={currentUser} 
+        onSelectApp={handleSelectApp}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
+  // Renderizar la app seleccionada
   return (
-    <div className="container">
-      <h1>My Weather</h1>
-      
-      <Header onSearch={setCity} currentCity={city} />
-
-      {isLoading && <p className="loading-message">Cargando clima de {city}...</p>}
-      {error && <p className="error-message">Error: {error}</p>}
-      
-      {weatherData && !isLoading && (
-        <>
-          <WeatherList data={weatherData} forecast={forecastData} />
-          <MusicRecommender weatherDescription={weatherDescription} />
-        </>
-      )}
-    </div>
+    <>
+      <AppHeader 
+        appName={getAppName(currentApp)}
+        onBackToMenu={handleBackToMenu}
+      />
+      <div className="app-wrapper">
+        {currentApp === 'weather' && <WeatherApp />}
+        {currentApp === 'users' && <UsersApp />}
+        {currentApp === 'cocktails' && <CocktailsApp />}
+      </div>
+    </>
   );
+}
+
+function getAppName(appId) {
+  const names = {
+    'weather': 'Mi Clima',
+    'users': 'Lista de Usuarios',
+    'cocktails': 'GlassofGod Cocktails'
+  };
+  return names[appId] || 'App';
 }
 
 export default App;

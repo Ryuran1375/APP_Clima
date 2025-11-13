@@ -410,3 +410,20 @@ p {
   .current-info img { width: 64px; height: 64px; }
   .temperature { font-size: 2.2rem; }
 }
+
+/* Estilos para el wrapper de las apps */
+.app-wrapper {
+  padding: 20px;
+  background: linear-gradient(to bottom, #f5f7fa 0%, #ffffff 100%);
+  min-height: calc(100vh - 80px);
+}
+
+.app-wrapper .container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
