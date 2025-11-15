@@ -74,15 +74,6 @@ function Login({ onLoginSuccess }) {
             Ingresar
           </button>
         </form>
-
-        <div className="demo-credentials">
-          <p>Credenciales de prueba:</p>
-          <ul>
-            <li><strong>Usuario:</strong> admin | <strong>Contraseña:</strong> admin123</li>
-            <li><strong>Usuario:</strong> user | <strong>Contraseña:</strong> user123</li>
-            <li><strong>Usuario:</strong> test | <strong>Contraseña:</strong> test123</li>
-          </ul>
-        </div>
       </div>
     </div>
   );
