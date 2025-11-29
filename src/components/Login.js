@@ -21,19 +21,23 @@ function Login({ onLoginSuccess }) {
       return;
     }
 
-    // Credenciales de ejemplo
+    // Normalizar entrada: trim y username case-insensitive
+    const uname = username.trim().toLowerCase();
+    const pwd = password.trim();
+
+    // Credenciales de ejemplo (claves en lower-case)
     const validUsers = {
       'admin': 'admin123',
       'user': 'user123',
       'test': 'test123'
     };
 
-    if (validUsers[username] && validUsers[username] === password) {
-      localStorage.setItem('currentUser', JSON.stringify({ 
-        username: username,
+    if (validUsers[uname] && validUsers[uname] === pwd) {
+      localStorage.setItem('currentUser', JSON.stringify({
+        username: uname,
         loginTime: new Date().toLocaleString()
       }));
-      onLoginSuccess(username);
+      onLoginSuccess(uname);
     } else {
       setError('Usuario o contraseña incorrectos');
     }
